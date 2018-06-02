@@ -17,7 +17,10 @@ def find_fist_link (link):
 link_count = ['https://en.wikipedia.org/wiki/Stefan_Lochner']
 limit_links = 21
 while len(link_count)<limit_links:
+    # 1、最后一个连接
     r = requests.get(link_count[-1])
+    # 2、函数找下一个链接
     add_list = find_fist_link(r)
+    # 3、找到的链接添加到列表
     link_count.append(add_list)
     print(link_count)
