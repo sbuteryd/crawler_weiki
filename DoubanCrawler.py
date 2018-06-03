@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 def find_fist_link (link):
     # 1、下载网页源码
+    r = requests.get(link)
     soup = BeautifulSoup(r.text,'lxml')
     # 2、找到第一个链接的ID
     fist_link = soup.find(id='mw-content-text')
@@ -12,15 +13,27 @@ def find_fist_link (link):
     get_link = second_step.find('a').get('href')
     return  "https://en.wikipedia.org"+get_link
 
+def check_list(url,target_urls):
+    for index,element in enumerate(url):
+        if element == target_urls:
+            print("find is good")
+            return False
+        elif len(url) > 25:
+            print("no find is over 25")
+            return  False
+        elif url[-1] in  url[:-1]:
+            print("repeat code")
+            return  False
+        else:
+            return  True
+
 # 2、得到第一个链接地址
 # 3、得到的网站放入一个列表
-link_count = ['https://en.wikipedia.org/wiki/Stefan_Lochner']
+link_count = 'https://en.wikipedia.org/wiki/Stefan_Lochner'
+target_url = '"https://en.wikipedia.org/wiki/Philosophy"'
 limit_links = 21
-while len(link_count)<limit_links:
-    # 1、最后一个连接
-    r = requests.get(link_count[-1])
-    # 2、函数找下一个链接
-    add_list = find_fist_link(r)
-    # 3、找到的链接添加到列表
-    link_count.append(add_list)
-    print(link_count)
+list =[link_count]
+while check_list(list,target_url):
+    list.append(find_fist_link(list[-1]))
+    print(list)
+
